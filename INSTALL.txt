@@ -1,0 +1,63 @@
+## Installation and basic operation of the Nginx load balancer
+Note: when you use the Nginx load balancer for the first time on a new server,
+generate a new dhparams.pem
+   $ sudo openssl dhparam -out dhparams.pem 2048
+
+Let's Encrypt certificates are valid for 90 days. Add a cronjob to
+automatically check twice a day (on 11:27 and 23:27) if the certificates need
+to be renewed and renews them if needed. Also the most recent certificates will
+be copied into the docker container of the Nginx load balancer. To do that, add
+the following line to `crontab` (using `sudo crontab -e`):
+27 11,23 * * * sudo /home/projects/nginx-load-balancer/cron.sh
+
+Some steps assume you have installed Let's Encrypt and have retrieved
+certificates for domains (it also works if you have Let's Encrypt installed
+with no certificates)
+
+Before starting a new Nginx load balancer container make sure that:
+   - all HTTPS domains are listed in import_certificates.sh
+   - no other container exists with the name `docker_c-nginx-load-balancer_1`
+     or which binds port 80 and/or 443, otherwise creating a new container will
+     fail
+   - `docker/nginx/conf.d/default.conf` and `docker/nginx/nginx.conf` contain
+     all relevant `server` blocks
+
+Create and start the container:
+   $ cd docker
+   $ sudo ./up.sh
+
+NOTE: When editing docker/nginx/nginx.conf or docker/nginx/conf.d/default.conf
+using vim, make sure to add the following line to your ~/.vimrc file otherwise
+the container will not receive any changes you made to it! https://forums.docker.com/t/modify-a-file-which-mount-as-a-data-volume-but-it-didnt-change-in-container/2813/11:
+set backupcopy=yes
+
+Always test your nginx.conf before going live with it! 
+   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
+
+Reload nginx.conf:
+   # Simple: From the host
+   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
+
+   # Alternative: From the container
+   # Enter the container
+   $ sudo docker exec -it docker_c-nginx-load-balancer_1 sh
+   # In the container run the following commands
+   $ nginx -t
+   $ nginx -s reload
+   # press ctrl + d to exit the container
+
+Static files are served from `../html`.
+
+
+## How to add basic access authentication (i.e. password protect) to a directory
+- Create a `.htpasswd` file containing the  username. The `.htpasswd` file should
+be stored in the `docker/nginx` directory:
+   $ sudo sh -c "echo -n 'USERNAME:' >> docker/nginx/.htpasswd"
+- Generate the password, after running this command you will be asked to input a
+password and repeat it:
+   $ sudo sh -c "openssl passwd -apr1 >> docker/nginx/.htpasswd"
+- Add the following two lines to a `server` or `location` block in
+`docker/nginx/conf.d/default.conf`:
+   auth_basic "Please login";
+   auth_basic_user_file /etc/nginx/.htpasswd;
+- Reload Nginx

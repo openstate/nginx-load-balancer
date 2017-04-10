@@ -1,7 +1,8 @@
 ## Installation and basic operation of the Nginx load balancer
 Note: when you use the Nginx load balancer for the first time on a new server,
 generate a new dhparams.pem
-   $ sudo openssl dhparam -out dhparams.pem 2048
+   $ cd docker
+   $ openssl dhparam -out dhparams.pem 2048
 
 Let's Encrypt certificates are valid for 90 days. Add a cronjob to
 automatically check twice a day (on 11:27 and 23:27) if the certificates need

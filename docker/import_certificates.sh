@@ -13,7 +13,7 @@ sudo docker cp dhparams.pem docker_c-nginx-load-balancer_1:/etc/ssl/private/
 
 for domain in "${domains[@]}"
 do
-    echo *** Importing certificate for "$domain"
+    echo "*** Importing certificate for $domain"
 
     # Create the directory if it does not exist
     sudo docker exec docker_c-nginx-load-balancer_1 mkdir -p "$directory""$domain"
@@ -28,7 +28,7 @@ do
 done
 
 # Reload Nginx
-echo *** Reload configuration
+echo "*** Reload configuration"
 sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
 if [ $? -eq 0 ]; then
   sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload

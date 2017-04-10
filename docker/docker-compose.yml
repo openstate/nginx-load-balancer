@@ -6,9 +6,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ~/nginx/:/etc/nginx/
-      - ~/../log/:/var/log/nginx/
-      - ~/../../html/:/usr/share/nginx/html/
+      - ./nginx/:/etc/nginx/
+      - ./../log/:/var/log/nginx/
+      - ./../../html/:/usr/share/nginx/html/
     restart: always
     networks:
       - nginx-load-balancer

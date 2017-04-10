@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Retrieve the container names for which an upstream is defined in conf/nginx.conf
-containers=($(sed -nr 's/upstream\s+(.*) \{/\1/p' nginx/nginx.conf))
+containers=($(sed -nr 's/[^#.*]upstream\s+(.*) \{/\1/p' nginx/nginx.conf))
 
 # For each container retrieve its current IP address and use it to
 # replace its old IP address in its upstream section in conf/nginx.conf

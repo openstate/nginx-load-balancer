@@ -47,6 +47,10 @@ Add the domain (transparencycamp.eu) to docker/import_certificates.sh and run
 the script:
    $ sudo ./docker/import_certificates.sh
 
+If this is the first certificate on the server you can now uncomment the top
+server block in docker/nginx/conf.d/default.conf to enable a default response
+for HTTPS requests.
+
 Edit docker/nginx/conf.d/default.conf
 NOTE: When editing default.conf using vim, make sure to add the following line
 to your ~/.vimrc file otherwise the container will not receive any changes you

@@ -4,7 +4,7 @@
 sudo ./update_ips.sh
 
 # Reload conf/nginx.conf
-echo *** Reload configuration
+echo "*** Reload configuration"
 sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
 if [ $? -eq 0 ]; then
   sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload

@@ -4,6 +4,9 @@ generate a new dhparams.pem
    $ cd docker
    $ openssl dhparam -out dhparams.pem 2048
 
+Create the directory `html` which can be used to serve static files
+   $ mkdir ../html
+
 Let's Encrypt certificates are valid for 90 days. Add a cronjob to
 automatically check twice a day (on 11:27 and 23:27) if the certificates need
 to be renewed and renews them if needed. Also the most recent certificates will

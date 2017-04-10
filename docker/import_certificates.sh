@@ -21,7 +21,7 @@ do
     # Dereference symlinks to fullchain and privkey
     fullchain=`sudo readlink -f /etc/letsencrypt/live/$domain/fullchain.pem`
     privkey=`sudo readlink -f /etc/letsencrypt/live/$domain/privkey.pem`
-    
+
     # Copy fullchain and privkey to the docker_c-nginx-load-balancer_1 docker container
     sudo docker cp $fullchain docker_c-nginx-load-balancer_1:/etc/letsencrypt/live/$domain/fullchain.pem
     sudo docker cp $privkey docker_c-nginx-load-balancer_1:/etc/letsencrypt/live/$domain/privkey.pem
@@ -32,7 +32,7 @@ echo *** Reload configuration
 sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
 if [ $? -eq 0 ]; then
   sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
-else 
+else
   printf "\nDID NOT RELOAD NGINX CONFIG: NGINX CONFIG GAVE AN ERROR!\n"
 fi
 

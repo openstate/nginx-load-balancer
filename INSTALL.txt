@@ -31,7 +31,7 @@ using vim, make sure to add the following line to your ~/.vimrc file otherwise
 the container will not receive any changes you made to it! https://forums.docker.com/t/modify-a-file-which-mount-as-a-data-volume-but-it-didnt-change-in-container/2813/11:
 set backupcopy=yes
 
-Always test your nginx.conf before going live with it! 
+Always test your nginx.conf before going live with it!
    $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
 
 Reload nginx.conf:

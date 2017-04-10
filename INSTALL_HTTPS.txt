@@ -56,7 +56,7 @@ set backupcopy=yes
 Add the following section (make sure the proxy_pass and ssl paths are correct!):
 server {
     listen 443 ssl http2;
-    server_name 
+    server_name
         transparencycamp.eu;
     ssl_certificate /etc/letsencrypt/live/transparencycamp.eu/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/transparencycamp.eu/privkey.pem;

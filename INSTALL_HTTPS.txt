@@ -10,7 +10,7 @@ See https://certbot.eff.org/.
 First make sure the A and AAAA DNS records of the domain list the IP address
 of this server. Temporarily add the domain to
 docker/nginx/conf.d/default.conf to retrieve the certificate using HTTP by
-either adding the following block:
+adding the following block:
 server {
     listen 80;
     server_name

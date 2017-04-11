@@ -1,4 +1,4 @@
-Commands to achieve HTTPS using docker_c-nginx_load-balancer_1. We use
+Commands to achieve HTTPS using docker_c-nginx-load-balancer_1. We use
 transparencycamp.eu as example domain.
 
 
@@ -25,8 +25,8 @@ server {
 }
 
 Reload Nginx. Always test your nginx.conf before going live with it!
-   $ sudo docker exec docker_c-nginx_load-balancer_1 nginx -t
-   $ sudo docker exec docker_c-nginx_load-balancer_1 nginx -s reload
+   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
+   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
 
 Now you can retrieve your certificate:
    $ sudo letsencrypt certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu -d tcampeu.mu.wikiwise.nl -d test.transparencycamp.eu
@@ -92,20 +92,20 @@ below the `ssl_certificate_key` line):
 add_header Strict-Transport-Security max-age=31536000;
 
 Always test your nginx.conf before going live with it!
-   $ sudo docker exec docker_c-nginx_load-balancer_1 nginx -t
+   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
 
 Reload nginx:
-   $ sudo docker exec docker_c-nginx_load-balancer_1 nginx -s reload
+   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
 
 
 Certificates are valid for 90 days. We run a cronjob twice a day (on 11:27 and
 23:27) which automatically checks if the certificates need to be renewed and
 renews them if needed. Also the most recent certificates will be copied into
-the docker container of the Nginx load balancer. See README.txt.
+the docker container of the Nginx load balancer. See INSTALL.txt.
 
 
 Note: add new SSL domains to the ssl-test monitor which runs a daily check on
 the domain using the SSL Labs SSL Server Test to see if something had changed
 (e.g., problems with the certificate or vulnarability to a new hack resulting
 in a lower grade). The file to add it to:
-Oxygen:/home/sicco/develop/ssl-test/check-ssl.py
+Oxygen:/home/projects/ssl-test/check-ssl.py

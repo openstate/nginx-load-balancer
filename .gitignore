@@ -1,3 +1,4 @@
 log/*
+.htpasswd
 dhparams.pem
 *.swp

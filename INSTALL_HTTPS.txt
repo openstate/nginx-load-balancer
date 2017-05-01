@@ -98,6 +98,26 @@ Reload nginx:
    $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
 
 
+### Migrate a certificate from one machine to another
+When moving a website it is best to migrate the certificate instead of creating
+a new one:
+   # On the old machine
+   $ sudo cp -r --preserve=links /etc/letsencrypt ~
+   $ sudo chown -R <your_user_name>:<your_user_name> ~/letsencrypt
+   # Log out of the old machine and log into the new machine
+   $ rsync -av <IP_OF_OLD_MACHINE>:letsencrypt ~
+   $ sudo -i
+   $ cp -r /home/<your_user_name>/letsencrypt/archive/<domain> /etc/letsencrypt/archive
+   $ cp -r /home/<your_user_name>/letsencrypt/live/<domain> /etc/letsencrypt/live
+   $ cp /home/<your_user_name>/letsencrypt/renewal/<domain>.conf /etc/letsencrypt/renewal
+   # Make sure the settings in /etc/letsencrypt/renewal/<domain>.conf are correct.
+   # Check the .conf files of other certificates if the format has changed.
+   # Exit sudo and check if it works
+   $ sudo certbot renew --dry-run
+   # Now follow the other steps above like adding the domain to ./import_certificates.sh
+   # and running it, etc.
+
+
 Certificates are valid for 90 days. We run a cronjob twice a day (on 11:27 and
 23:27) which automatically checks if the certificates need to be renewed and
 renews them if needed. Also the most recent certificates will be copied into

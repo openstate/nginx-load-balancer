@@ -114,6 +114,7 @@ a new one:
    # Check the .conf files of other certificates if the format has changed.
    # Exit sudo and check if it works
    $ sudo certbot renew --dry-run
+   # Remove `~/letsencrypt` on the old and new machine
    # Now follow the other steps above like adding the domain to ./import_certificates.sh
    # and running it, etc.
 

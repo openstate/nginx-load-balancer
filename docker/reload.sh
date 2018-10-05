@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Update container IP addresses in conf/nginx.conf
-sudo ./update_ips.sh
-
 # Reload conf/nginx.conf
 echo "*** Reload configuration"
 sudo docker exec docker_c-nginx-load-balancer_1 nginx -t

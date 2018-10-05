@@ -50,13 +50,21 @@ Reload nginx.conf:
    $ nginx -s reload
    # press ctrl + d to exit the container
 
+Or combine both testing and reloading by using the reload.sh script
+   $ cd docker
+   $ ./reload.sh
+
 Static files are served from `../html`.
 
 
 ## How to add basic access authentication (i.e. password protect) to a directory
+# NOTE: we use `.htpasswd` below but you need to create a new file(name) for each
+# different website you want to add a password to, so don't add multiple lines to
+# the same `.htpasswd` file as this will allow all users/passwords to work for all
+# websites that reference this `.htpasswd` file.
 - Create a `.htpasswd` file containing the  username. The `.htpasswd` file should
 be stored in the `docker/nginx` directory:
-   $ sudo sh -c "echo -n 'USERNAME:' >> docker/nginx/.htpasswd"
+   $ sudo sh -c "echo -n '<USERNAME>:' >> docker/nginx/.htpasswd"
 - Generate the password, after running this command you will be asked to input a
 password and repeat it:
    $ sudo sh -c "openssl passwd -apr1 >> docker/nginx/.htpasswd"

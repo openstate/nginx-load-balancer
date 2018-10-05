@@ -24,9 +24,9 @@ server {
     }
 }
 
-Reload Nginx. Always test your nginx.conf before going live with it!
-   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
-   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
+Reload Nginx:
+   $ cd docker
+   $ ./reload.sh
 
 Now you can retrieve your certificate:
    $ sudo letsencrypt certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu -d tcampeu.mu.wikiwise.nl -d test.transparencycamp.eu
@@ -45,7 +45,8 @@ configurations below.
 ### Install the certificate
 Add the domain (transparencycamp.eu) to docker/import_certificates.sh and run
 the script:
-   $ sudo ./docker/import_certificates.sh
+   $ cd docker
+   $ sudo ./import_certificates.sh
 
 If this is the first certificate on the server you can now uncomment the top
 server block in docker/nginx/conf.d/default.conf to enable a default response
@@ -91,16 +92,18 @@ server {
 below the `ssl_certificate_key` line):
 add_header Strict-Transport-Security max-age=31536000;
 
-Always test your nginx.conf before going live with it!
-   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
-
 Reload nginx:
-   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
+   $ cd docker
+   $ ./reload.sh
 
 
 ### Migrate a certificate from one machine to another
 When moving a website it is best to migrate the certificate instead of creating
-a new one:
+a new one. The latter option is a bad idea because you first need to change the
+DNS to point to the new machine in order to retrieve a new certificate, which
+will result in failed HTTPS requests to the website because you don't have a
+certificate yet (especially when using HSTS). So here is the way to migrate
+a certificate:
    # On the old machine
    $ sudo cp -r --preserve=links /etc/letsencrypt ~
    $ sudo chown -R <your_user_name>:<your_user_name> ~/letsencrypt
@@ -117,6 +120,15 @@ a new one:
    # Remove `~/letsencrypt` on the old and new machine
    # Now follow the other steps above like adding the domain to ./import_certificates.sh
    # and running it, etc.
+
+
+### Remove domain from certificate
+If a certificate contains multiple subdomains you sometimes want to remove one
+of those subdomains. Simply first delete the certificate and then regenerate
+the certificate without the subdomain, e.g.:
+   # Note: you can retrieve the cert-name using `sudo letsencrypt certificates` and check the value for 'Certificate Name'
+   $ sudo letsencrypt delete --cert-name transparencycamp.eu
+   # Then use the 'sudo letsencrypt certonly' as shown before in this document without the subdomain you want to remove
 
 
 Certificates are valid for 90 days. We run a cronjob twice a day (on 11:27 and

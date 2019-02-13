@@ -2,3 +2,7 @@ log/*
 .htpasswd*
 dhparams.pem
 *.swp
+transip.ini
+transip-rsa.key
+docker/nginx/nginx.conf
+docker/nginx/conf.d/default.conf

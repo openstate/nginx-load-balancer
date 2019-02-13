@@ -1,0 +1,122 @@
+### HTTP SECTION
+
+## Default response if no domain is specified.
+## In case of a HTTP request on port 80 return a 404.
+## In case of a HTTPS request on port 443 return the URL without HTTPS.
+## This does give a warning as the domain doesn't match the cert's
+## domain, but it will redirect to the correct domain if the user
+## confirms the securtiy exception. This block can be uncommented once a
+## certificate is available on this server (see INSTALL_HTTPS.txt).
+#server {
+#    listen 80;
+#    return 404;
+#}
+#server {
+#    listen 443;
+#    # Specify certificate info for a domain, it doesn't matter which domain
+#    ssl_certificate /etc/letsencrypt/live/<DOMAIN>/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/<DOMAIN>/privkey.pem;
+#    return 301 http://$host$request_uri;
+#}
+
+## Example using an upstream docker specified in docker/nginx/nginx.conf:
+## opencultuurdata.nl
+## served by docker_c-wordpress-nginx_1
+#server {
+#    listen 80;
+#    server_name
+#        opencultuurdata.nl
+#        www.opencultuurdata.nl;
+#
+#    location / {
+#        proxy_pass http://docker_c-wordpress-nginx_1;
+#        # Preserve the host header (i.e., the domain name) otherwise
+#        # WordPress MU doesn't know which site to serve
+#        proxy_set_header Host $host;
+#        proxy_set_header X-Forwarded-Proto $scheme;
+#        proxy_set_header X-Real-IP $remote_addr;
+#        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#    }
+#}
+
+## Example of a static page:
+## openwob.nl
+## served by static HTML
+#server {
+#    listen 80;
+#    server_name
+#        openwob.nl
+#        www.openwob.nl;
+#    root /usr/share/nginx/html/openwob;
+#    index index.html;
+#
+#    # Deny acccess to any .git repo's and README's; expand this
+#    # section if there are other files which should not be
+#    # accessible
+#    location ~ /.git/ {
+#        deny all;
+#    }
+#    location ~ README.md {
+#        deny all;
+#    }
+#
+#    location / {
+#        # First attempt to serve request as file, then
+#        # as directory, then fall back to displaying a 404.
+#        try_files $uri $uri/ =404;
+#        # Uncomment to enable naxsi on this location
+#        # include /etc/nginx/naxsi.rules
+#    }
+#}
+
+## Example of a redirect:
+## redirect
+#server {
+#    listen 80;
+#    server_name
+#        openzorgdata.nl
+#        www.openzorgdata.nl;
+#
+#    location / {
+#        return 301 https://openstate.eu/nl/open-zorg-data-2/;
+#    }
+#}
+
+
+### HTTPS SECTION
+
+## Force redirect from HTTP to HTTPS for the following domains (this section
+## can be reused by unrelated domains)
+#server {
+#    listen 80;
+#    server_name
+#        accountabilityhack.nl
+#        www.accountabilityhack.nl
+#        hackdeoverheid.nl
+#        www.hackdeoverheid.nl;
+#
+#    return 301 https://$host$request_uri;
+#}
+
+## Example using an upstream docker specified in docker/nginx/nginx.conf over HTTPS:
+## accountabilityhack.nl
+## served by docker_c-wordpress-nginx_1
+#server {
+#    listen 443 ssl http2;
+#    server_name
+#        accountabilityhack.nl
+#        www.accountabilityhack.nl;
+#    ssl_certificate /etc/letsencrypt/live/accountabilityhack.nl/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/accountabilityhack.nl/privkey.pem;
+#    add_header Strict-Transport-Security max-age=31536000;
+#
+#    location / {
+#        proxy_pass http://docker_c-wordpress-nginx_1;
+#        # Preserve the host header (i.e., the domain name) otherwise
+#        # WordPress MU doesn't know which site to serve
+#        proxy_set_header Host $host;
+#        proxy_set_header X-Forwarded-Proto $scheme;
+#        proxy_set_header X-Real-IP $remote_addr;
+#        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#    }
+#}

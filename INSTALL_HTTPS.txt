@@ -3,21 +3,39 @@ transparencycamp.eu as example domain.
 
 
 ### Install Let's Encrypt if it is not yet installed
-See https://certbot.eff.org/.
+See https://certbot.eff.org/
+
+
+### Install and setup TransIP API if it is not done yet (needed for DNS
+### method)
+   $ sudo pip install certbot-dns-transip
+
+Either copy `transip-rsa.key` and `transip.ini` from another server
+(e.g., Oxygen) to this directory, or if there is no existing API key,
+create a new one on the TransIP website copy it here in a file called
+`transip.key` and run:
+   $ openssl rsa -in transip.key -out transip-rsa.key
+   $ chmod 600 transip-rsa.key
+   $ rm transip.key
+   $ echo 'certbot_dns_transip:dns_transip_username = openstate' > transip.ini
+   $ echo 'certbot_dns_transip:dns_transip_key_file = transip-rsa.key' >> transip.ini
 
 
 ### Retrieve a certificate
 First make sure the A and AAAA DNS records of the domain list the IP address
-of this server. Temporarily add the domain to
+of this server.
+
+
+(This step is only necessary if you retrieve the certificate using the
+HTTP method. Normally we use the DNS method.)
+Temporarily add the domain to
 docker/nginx/conf.d/default.conf to retrieve the certificate using HTTP by
 adding the following block:
 server {
     listen 80;
     server_name
         transparencycamp.eu
-        www.transparencycamp.eu
-        tcampeu.mu.wikiwise.nl
-        test.transparencycamp.eu;
+        www.transparencycamp.eu:
 
     location ^~ /.well-known/acme-challenge/ {
         root /usr/share/nginx/html/;
@@ -28,8 +46,14 @@ Reload Nginx:
    $ cd docker
    $ ./reload.sh
 
-Now you can retrieve your certificate:
-   $ sudo letsencrypt certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu -d tcampeu.mu.wikiwise.nl -d test.transparencycamp.eu
+Now you can retrieve your certificate using either the DNS method (preferred,
+as this allows you to get a wildcard certificate) or the HTTP method:
+   # DNS method (you need to run this from the `/home/projects/nginx-load-balancer` directory)
+   $ sudo certbot certonly --agree-tos -m developers@openstate.eu -d transparencycamp.eu -d *.transparencycamp.eu -a certbot-dns-transip:dns-transip --certbot-dns-transip:dns-transip-credentials transip.ini --certbot-dns-transip:dns-transip-propagation-seconds 240
+
+   # HTTP method
+   $ sudo certbot certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu
+
 This gives the following output
 IMPORTANT NOTES:
  - Congratulations! Your certificate and chain have been saved at
@@ -37,17 +61,14 @@ IMPORTANT NOTES:
    will expire on 2016-04-02. To obtain a new version of the
    certificate in the future, simply run Let's Encrypt again.
 
+(This step is only necessary if you retrieve the certificate using the
+HTTP method. Normally we use the DNS method.)
 You can now remove the temporary changes you made to
 docker/nginx/conf.d/default.conf. We will add the final default.conf
 configurations below.
 
 
 ### Install the certificate
-Add the domain (transparencycamp.eu) to docker/import_certificates.sh and run
-the script:
-   $ cd docker
-   $ sudo ./import_certificates.sh
-
 If this is the first certificate on the server you can now uncomment the top
 server block in docker/nginx/conf.d/default.conf to enable a default response
 for HTTPS requests.
@@ -58,11 +79,13 @@ to your ~/.vimrc file otherwise the container will not receive any changes you
 made to it! https://forums.docker.com/t/modify-a-file-which-mount-as-a-data-volume-but-it-didnt-change-in-container/2813/11:
 set backupcopy=yes
 
-Add the following section (make sure the proxy_pass and ssl paths are correct!):
+Add the following section (make sure the proxy_pass and ssl paths are
+correct! change '*' with 'www' if you don't use a wildcard certificate):
 server {
     listen 443 ssl http2;
     server_name
-        transparencycamp.eu;
+        transparencycamp.eu
+        *.transparencycamp.eu;
     ssl_certificate /etc/letsencrypt/live/transparencycamp.eu/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/transparencycamp.eu/privkey.pem;
 
@@ -71,6 +94,8 @@ server {
         proxy_set_header Host $host;
     }
 
+    # This block is only necessary if you retrieve the certificate using
+    # the HTTP method. Normally we use the DNS method.
     location ^~ /.well-known/acme-challenge/ {
         root /usr/share/nginx/html/;
     }
@@ -79,12 +104,13 @@ server {
 (optional but recommended) if you do not want the website to be reachable by
 both HTTP and HTTPS, but only via HTTPS:
 - Remove the domain from the HTTP section
-- Add the following block to force redirect from HTTP to HTTPS:
+- Add the following block to force redirect from HTTP to HTTPS (change
+  '*' with 'www' if you don't use a wildcard certificate):
 server {
     listen 80;
     server_name
         transparencycamp.eu
-        www.transparencycamp.eu;
+        *.transparencycamp.eu;
 
     return 301 https://$host$request_uri;
 }
@@ -118,23 +144,21 @@ a certificate:
    # Exit sudo and check if it works
    $ sudo certbot renew --dry-run
    # Remove `~/letsencrypt` on the old and new machine
-   # Now follow the other steps above like adding the domain to ./import_certificates.sh
-   # and running it, etc.
+   # Now follow the other steps above in the 'Install the certificate' section
 
 
 ### Remove domain from certificate
 If a certificate contains multiple subdomains you sometimes want to remove one
 of those subdomains. Simply first delete the certificate and then regenerate
 the certificate without the subdomain, e.g.:
-   # Note: you can retrieve the cert-name using `sudo letsencrypt certificates` and check the value for 'Certificate Name'
-   $ sudo letsencrypt delete --cert-name transparencycamp.eu
-   # Then use the 'sudo letsencrypt certonly' as shown before in this document without the subdomain you want to remove
+   # Note: you can retrieve the cert-name using `sudo certbot certificates` and check the value for 'Certificate Name'
+   $ sudo certbot delete --cert-name transparencycamp.eu
+   # Then use the 'sudo certbot certonly' as shown before in this document without the subdomain you want to remove
 
 
 Certificates are valid for 90 days. We run a cronjob twice a day (on 11:27 and
 23:27) which automatically checks if the certificates need to be renewed and
-renews them if needed. Also the most recent certificates will be copied into
-the docker container of the Nginx load balancer. See INSTALL.txt.
+renews them if needed. See INSTALL.txt.
 
 
 Note: add new SSL domains to the ssl-test monitor which runs a daily check on

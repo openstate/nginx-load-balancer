@@ -9,17 +9,15 @@ Create the directory `html` which can be used to serve static files
 
 Let's Encrypt certificates are valid for 90 days. Add a cronjob to
 automatically check twice a day (on 11:27 and 23:27) if the certificates need
-to be renewed and renews them if needed. Also the most recent certificates will
-be copied into the docker container of the Nginx load balancer. To do that, add
+to be renewed and renews them if needed. To do that, add
 the following line to `crontab` (using `sudo crontab -e`):
-27 11,23 * * * sudo /home/projects/nginx-load-balancer/cron.sh
+27 11,23 * * * (cd /home/projects/nginx-load-balancer && sudo certbot renew)
 
 Some steps assume you have installed Let's Encrypt and have retrieved
 certificates for domains (it also works if you have Let's Encrypt installed
 with no certificates)
 
 Before starting a new Nginx load balancer container make sure that:
-   - all HTTPS domains are listed in import_certificates.sh
    - no other container exists with the name `docker_c-nginx-load-balancer_1`
      or which binds port 80 and/or 443, otherwise creating a new container will
      fail
@@ -28,7 +26,7 @@ Before starting a new Nginx load balancer container make sure that:
 
 Create and start the container:
    $ cd docker
-   $ sudo ./up.sh
+   $ sudo docker-compose up -d
 
 NOTE: When editing docker/nginx/nginx.conf or docker/nginx/conf.d/default.conf
 using vim, make sure to add the following line to your ~/.vimrc file otherwise
@@ -55,6 +53,17 @@ Or combine both testing and reloading by using the reload.sh script
    $ ./reload.sh
 
 Static files are served from `../html`.
+
+
+## How to update Nginx
+- NOTE: never(!) run `docker-compose down` as this removes the docker network and all containers won't be able reconnect to the new network!
+- Check the most recent version of Nginx Alpine on https://hub.docker.com/_/nginx
+    - Also check the changelog (especially for 'Security' related fixes) on http://nginx.org/en/CHANGES
+- Change the version of Nginx Alpine in `docker/docker-compose.yml`
+- Rebuild and create the new container
+   $ cd docker
+   $ sudo docker-compose up -d
+- You will see some `nginx: [warn] conflicting server name...` messages, these are expected during the build process and can be ignored
 
 
 ## How to add basic access authentication (i.e. password protect) to a directory

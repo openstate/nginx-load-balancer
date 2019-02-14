@@ -44,7 +44,6 @@ http {
     server_names_hash_max_size 600;
 
     # LOAD BALANCING
-    # Make sure these IPs are correct after (re)starting the docker containers by running the update_and_reload.sh script
     # Example config:
     #upstream docker_c-ocd-nginx_1 {
     #    server docker_c-ocd-nginx_1:80;

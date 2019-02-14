@@ -25,7 +25,6 @@ create a new one on the TransIP website copy it here in a file called
 First make sure the A and AAAA DNS records of the domain list the IP address
 of this server.
 
-
 (This step is only necessary if you retrieve the certificate using the
 HTTP method. Normally we use the DNS method.)
 Temporarily add the domain to
@@ -41,7 +40,6 @@ server {
         root /usr/share/nginx/html/;
     }
 }
-
 Reload Nginx:
    $ cd docker
    $ ./reload.sh
@@ -92,6 +90,9 @@ server {
     location / {
         proxy_pass http://docker_c-nginx_1;
         proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
     # This block is only necessary if you retrieve the certificate using
@@ -100,6 +101,12 @@ server {
         root /usr/share/nginx/html/;
     }
 }
+
+Note: add new SSL domains to the ssl-test monitor which runs a daily check on
+the domain using the SSL Labs SSL Server Test to see if something had changed
+(e.g., problems with the certificate or vulnarability to a new hack resulting
+in a lower grade). The file to add it to:
+Oxygen:/home/projects/ssl-test/check-ssl.py
 
 (optional but recommended) if you do not want the website to be reachable by
 both HTTP and HTTPS, but only via HTTPS:
@@ -159,10 +166,3 @@ the certificate without the subdomain, e.g.:
 Certificates are valid for 90 days. We run a cronjob twice a day (on 11:27 and
 23:27) which automatically checks if the certificates need to be renewed and
 renews them if needed. See INSTALL.txt.
-
-
-Note: add new SSL domains to the ssl-test monitor which runs a daily check on
-the domain using the SSL Labs SSL Server Test to see if something had changed
-(e.g., problems with the certificate or vulnarability to a new hack resulting
-in a lower grade). The file to add it to:
-Oxygen:/home/projects/ssl-test/check-ssl.py

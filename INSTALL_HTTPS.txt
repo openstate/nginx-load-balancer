@@ -52,12 +52,17 @@ as this allows you to get a wildcard certificate) or the HTTP method:
    # HTTP method
    $ sudo certbot certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu
 
-This gives the following output
+This gives the following output:
 IMPORTANT NOTES:
- - Congratulations! Your certificate and chain have been saved at
-   /etc/letsencrypt/live/transparencycamp.eu/fullchain.pem. Your cert
-   will expire on 2016-04-02. To obtain a new version of the
-   certificate in the future, simply run Let's Encrypt again.
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/transparencycamp.eu/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/transparencycamp.eu/privkey.pem
+   Your cert will expire on 2019-05-15. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot
+   again. To non-interactively renew *all* of your certificates, run
+   "certbot renew"
+
 
 (This step is only necessary if you retrieve the certificate using the
 HTTP method. Normally we use the DNS method.)

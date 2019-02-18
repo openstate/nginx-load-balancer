@@ -1,9 +1,14 @@
 Commands to achieve HTTPS using docker_c-nginx-load-balancer_1. We use
-transparencycamp.eu as example domain.
+transparencycamp.eu as example domain. Certbot is already installed via
+docker-compose and available in the `docker_c-certbot_1` container.
 
 
-### Install Let's Encrypt if it is not yet installed
-See https://certbot.eff.org/
+### Setup Let's Encrypt cron
+Let's Encrypt certificates are valid for 90 days. Add a cronjob to
+automatically check twice a day (on 11:27 and 23:27) if the certificates need
+to be renewed and renews them if needed. To do that, add
+the following line to `crontab` (using `sudo crontab -e`):
+27 11,23 * * * sudo docker exec docker_c-certbot_1 certbot renew
 
 
 ### Install and setup TransIP API if it is not done yet (needed for DNS
@@ -11,11 +16,12 @@ See https://certbot.eff.org/
    $ sudo pip install certbot-dns-transip
 
 Either copy `transip-rsa.key` and `transip.ini` from another server
-(e.g., Oxygen) to this directory, or if there is no existing API key,
-create a new one on the TransIP website copy it here in a file called
-`transip.key` and run:
+(e.g., Oxygen) to the `docker` directory, or if there is no existing API
+key, create a new one on the TransIP website copy it here in a file
+called `docker/transip.key` and run:
+   $ cd docker
    $ openssl rsa -in transip.key -out transip-rsa.key
-   $ chmod 600 transip-rsa.key
+   $ chmod 660 transip-rsa.key
    $ rm transip.key
    $ echo 'certbot_dns_transip:dns_transip_username = openstate' > transip.ini
    $ echo 'certbot_dns_transip:dns_transip_key_file = transip-rsa.key' >> transip.ini
@@ -46,11 +52,10 @@ Reload Nginx:
 
 Now you can retrieve your certificate using either the DNS method (preferred,
 as this allows you to get a wildcard certificate) or the HTTP method:
-   # DNS method (you need to run this from the `/home/projects/nginx-load-balancer` directory)
-   $ sudo certbot certonly --agree-tos -m developers@openstate.eu -d transparencycamp.eu -d *.transparencycamp.eu -a certbot-dns-transip:dns-transip --certbot-dns-transip:dns-transip-credentials transip.ini --certbot-dns-transip:dns-transip-propagation-seconds 240
+   $ sudo docker exec docker_c-certbot_1 certbot certonly --agree-tos -m developers@openstate.eu -d transparencycamp.eu -d *.transparencycamp.eu -a certbot-dns-transip:dns-transip --certbot-dns-transip:dns-transip-credentials transip.ini --certbot-dns-transip:dns-transip-propagation-seconds 240
 
    # HTTP method
-   $ sudo certbot certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu
+   $ sudo docker exec docker_c-certbot_1 certbot certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu
 
 This gives the following output:
 IMPORTANT NOTES:

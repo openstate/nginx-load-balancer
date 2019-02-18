@@ -11,16 +11,6 @@ Copy the following files and view them to see how to configure new websites
 Create the directory `html` which can be used to serve static files
    $ mkdir ../html
 
-Let's Encrypt certificates are valid for 90 days. Add a cronjob to
-automatically check twice a day (on 11:27 and 23:27) if the certificates need
-to be renewed and renews them if needed. To do that, add
-the following line to `crontab` (using `sudo crontab -e`):
-27 11,23 * * * (cd /home/projects/nginx-load-balancer && sudo certbot renew)
-
-Some steps assume you have installed Let's Encrypt and have retrieved
-certificates for domains (it also works if you have Let's Encrypt installed
-with no certificates)
-
 Before starting a new Nginx load balancer container make sure that:
    - no other container exists with the name `docker_c-nginx-load-balancer_1`
      or which binds port 80 and/or 443, otherwise creating a new container will
@@ -56,14 +46,13 @@ Or combine both testing and reloading by using the reload.sh script
    $ cd docker
    $ ./reload.sh
 
-Static files are served from `../html`.
 
-
-## How to update Nginx
+## How to update Nginx (and Certbot)
 - NOTE: never(!) run `docker-compose down` as this removes the docker network and all containers won't be able reconnect to the new network!
 - Check the most recent version of Nginx Alpine on https://hub.docker.com/_/nginx
     - Also check the changelog (especially for 'Security' related fixes) on http://nginx.org/en/CHANGES
 - Change the version of Nginx Alpine in `docker/docker-compose.yml`
+    - (optional) change the version of Certbot in `docker/Dockerfile-cerbot` (see the most recent version https://hub.docker.com/r/certbot/certbot/tags and check the changelog https://github.com/certbot/certbot/blob/master/CHANGELOG.md)
 - Rebuild and create the new container
    $ cd docker
    $ sudo docker-compose up -d

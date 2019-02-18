@@ -15,5 +15,15 @@ services:
     restart: always
     networks:
       - nginx-load-balancer
+  c-certbot:
+    build:
+      context: .
+      dockerfile: Dockerfile-certbot
+    restart: always
+    volumes:
+      - /etc/letsencrypt/:/etc/letsencrypt/
+      - ./../../html/:/home/projects/html
+      - ./transip.ini:/opt/certbot/transip.ini
+      - ./transip-rsa.key:/opt/certbot/transip-rsa.key
 networks:
   nginx-load-balancer:

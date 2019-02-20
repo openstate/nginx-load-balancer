@@ -11,10 +11,8 @@ the following line to `crontab` (using `sudo crontab -e`):
 27 11,23 * * * sudo docker exec docker_c-certbot_1 certbot renew
 
 
-### Install and setup TransIP API if it is not done yet (needed for DNS
+### Setup TransIP API if it is not done yet (needed for DNS
 ### method)
-   $ sudo pip install certbot-dns-transip
-
 Either copy `transip-rsa.key` and `transip.ini` from another server
 (e.g., Oxygen) to the `docker` directory, or if there is no existing API
 key, create a new one on the TransIP website copy it here in a file

@@ -172,8 +172,3 @@ the certificate without the subdomain, e.g.:
    # Note: you can retrieve the cert-name using `sudo certbot certificates` and check the value for 'Certificate Name'
    $ sudo certbot delete --cert-name transparencycamp.eu
    # Then use the 'sudo certbot certonly' as shown before in this document without the subdomain you want to remove
-
-
-Certificates are valid for 90 days. We run a cronjob twice a day (on 11:27 and
-23:27) which automatically checks if the certificates need to be renewed and
-renews them if needed. See INSTALL.txt.

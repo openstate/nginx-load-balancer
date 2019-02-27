@@ -4,6 +4,21 @@ generate a new dhparams.pem
    $ cd docker
    $ openssl dhparam -out dhparams.pem 2048
 
+Setup TransIP API (needed for Let's Encrypt's DNS method)
+Either copy `transip-rsa.key` and `transip.ini` from another server
+(e.g., Oxygen) to the `docker` directory, or if there is no existing API
+key, create a new one on the TransIP website copy it here in a file
+called `docker/transip.key` and run:
+   $ cd docker
+   $ openssl rsa -in transip.key -out transip-rsa.key
+   $ chmod 660 transip-rsa.key
+   $ rm transip.key
+   $ echo 'certbot_dns_transip:dns_transip_username = openstate' > transip.ini
+   $ echo 'certbot_dns_transip:dns_transip_key_file = transip-rsa.key' >> transip.ini
+
+Whitelist the IPv4 and IPv6 addresses of this server in the API configuration
+settings on transip.nl
+
 Copy the following file and view it to see how to configure new websites
 - Copy docker/nginx/conf.d/default.conf.example to docker/nginx/conf.d/default.conf
 

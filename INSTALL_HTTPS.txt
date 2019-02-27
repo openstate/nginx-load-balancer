@@ -24,6 +24,9 @@ called `docker/transip.key` and run:
    $ echo 'certbot_dns_transip:dns_transip_username = openstate' > transip.ini
    $ echo 'certbot_dns_transip:dns_transip_key_file = transip-rsa.key' >> transip.ini
 
+Whitelist the IPv4 and IPv6 addresses of this server in the API configuration
+settings on transip.nl
+
 
 ### Retrieve a certificate
 First make sure the A and AAAA DNS records of the domain list the IP address

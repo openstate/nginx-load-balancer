@@ -7,3 +7,4 @@ transip-rsa.key
 docker/nginx/conf.d/*.conf
 docker/nginx/conf.d/*/*.conf
 old-logs/
+fabfile.pyc

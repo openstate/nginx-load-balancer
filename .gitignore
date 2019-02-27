@@ -4,5 +4,6 @@ dhparams.pem
 *.swp
 transip.ini
 transip-rsa.key
-docker/nginx/conf.d/default.conf
+docker/nginx/conf.d/*.conf
+docker/nginx/conf.d/*/*.conf
 old-logs/

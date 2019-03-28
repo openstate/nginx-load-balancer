@@ -35,10 +35,16 @@ Create and start the container:
    $ cd docker
    $ sudo docker-compose up -d
 
-NOTE: When editing docker/nginx/conf.d/default.conf (or docker/nginx/nginx.conf)
-using vim, make sure to add the following line to your ~/.vimrc file otherwise
-the container will not receive any changes you made to it! https://forums.docker.com/t/modify-a-file-which-mount-as-a-data-volume-but-it-didnt-change-in-container/2813/11:
-set backupcopy=yes
+NOTE: When editing docker/nginx/nginx.conf with vim, make sure to add the
+following line to your ~/.vimrc file otherwise the container will not receive
+any changes you made to it (see
+https://forums.docker.com/t/modify-a-file-which-mount-as-a-data-volume-but-it-didnt-change-in-container/2813/11):
+   - set backupcopy=yes
+NOTE2: If you edit docker/nginx/nginx.conf, push it to GitHub and pull it to the
+servers, use `fab deploy_and_restart`, as `docker-compose restart` is required to
+update the new inode (otherwise the new `nginx.conf` is not mounted in the
+container)
+
 
 Always test your configuration before going live with it!
    $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t

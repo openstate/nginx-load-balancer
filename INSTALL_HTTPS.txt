@@ -117,7 +117,7 @@ server {
 }
 - Add this line which enables HSTS, to the SSL server section (e.g., add it
 below the `ssl_certificate_key` line):
-add_header Strict-Transport-Security max-age=31536000;
+add_header Strict-Transport-Security max-age=31536000 always;
 
 Reload nginx:
    $ cd docker

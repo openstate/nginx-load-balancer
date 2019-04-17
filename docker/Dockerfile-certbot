@@ -2,6 +2,7 @@ FROM certbot/certbot:v0.33.1
 MAINTAINER Open State Foundation <developers@openstate.eu>
 
 WORKDIR /opt/certbot
-RUN pip install certbot-dns-transip
+RUN pip install --upgrade pip
+RUN pip install certbot-dns-transip==0.2.4
 
 ENTRYPOINT tail -f /dev/null

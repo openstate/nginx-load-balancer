@@ -143,7 +143,7 @@ a certificate:
    # Make sure the settings in /etc/letsencrypt/renewal/<domain>.conf are correct.
    # Check the .conf files of other certificates if the format has changed.
    # Exit sudo and check if it works
-   $ sudo certbot renew --dry-run
+   $ sudo docker exec docker_c-certbot_1 certbot renew --dry-run --no-random-sleep-on-renew
    # Remove `~/letsencrypt` on the old and new machine
    # Now follow the other steps above in the 'Install the certificate' section
 
@@ -152,6 +152,6 @@ a certificate:
 If a certificate contains multiple subdomains you sometimes want to remove one
 of those subdomains. Simply first delete the certificate and then regenerate
 the certificate without the subdomain, e.g.:
-   # Note: you can retrieve the cert-name using `sudo certbot certificates` and check the value for 'Certificate Name'
-   $ sudo certbot delete --cert-name transparencycamp.eu
-   # Then use the 'sudo certbot certonly' as shown before in this document without the subdomain you want to remove
+   # Note: you can retrieve the cert-name using `sudo docker exec docker_c-certbot_1 certbot certificates` and check the value for 'Certificate Name'
+   $ sudo docker exec docker_c-certbot_1 certbot delete --cert-name transparencycamp.eu
+   # Then use the 'sudo docker exec docker_c-certbot_1 certbot certonly' as shown before in this document without the subdomain you want to remove

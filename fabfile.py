@@ -20,8 +20,17 @@ def deploy_and_restart():
 
 
 def deploy_and_up():
-    "Runs 'git pull', docker-compose up -d (required if you update Nginx/Certbot version) and reloads Nginx"
+    "Runs 'git pull', 'docker-compose up -d' (required if you update Nginx version) and reloads Nginx"
     with cd('/home/projects/nginx-load-balancer/docker'):
         run('git pull git@github.com:openstate/nginx-load-balancer.git')
+        sudo('docker-compose up -d')
+        sudo('./reload.sh')
+
+
+def deploy_certbot():
+    "Runs 'git pull', 'docker-compose build c-certbot',  'docker-compose up -d' (required if you update Certbot version) and reloads Nginx"
+    with cd('/home/projects/nginx-load-balancer/docker'):
+        run('git pull git@github.com:openstate/nginx-load-balancer.git')
+        sudo('docker-compose build c-certbot')
         sudo('docker-compose up -d')
         sudo('./reload.sh')

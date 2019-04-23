@@ -1,0 +1,8 @@
+version: '2.0'
+services:
+  c-nginx-load-balancer:
+    restart: "no"
+  c-certbot:
+    restart: "no"
+networks:
+  nginx-load-balancer:

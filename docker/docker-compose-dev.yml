@@ -1,6 +1,8 @@
 version: '2.0'
 services:
   c-nginx-load-balancer:
+    volumes:
+      - ./mkcert/:/etc/letsencrypt/live/
     restart: "no"
   c-certbot:
     restart: "no"

@@ -155,3 +155,17 @@ the certificate without the subdomain, e.g.:
    # Note: you can retrieve the cert-name using `sudo docker exec docker_c-certbot_1 certbot certificates` and check the value for 'Certificate Name'
    $ sudo docker exec docker_c-certbot_1 certbot delete --cert-name transparencycamp.eu
    # Then use the 'sudo docker exec docker_c-certbot_1 certbot certonly' as shown before in this document without the subdomain you want to remove
+
+
+### Create locally signed and locally trusted certificates for development
+Install [mkcert](https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/), this is easiest by downloading a [binary release](https://github.com/FiloSottile/mkcert/releases/tag/v1.1.2) into the `docker/mkcert` directory (make it executable and rename the release to `mkcert`)
+
+Create a new local CA and install the CA in the system trust store and your browsers (requires restart of your browser!)
+   $ cd docker/mkcert
+   $ ./mkcert -install
+
+Example of generating certificates for openstate.eu
+   $ ./mkcert openstate.eu *.openstate.eu
+   $ mkdir openstate.eu
+   $ mv openstate.eu+1.pem openstate.eu/fullchain.pem
+   $ mv openstate.eu+1-key.pem openstate.eu/privkey.pem

@@ -83,18 +83,20 @@ Or combine both testing and reloading by using the reload.sh script
 
 
 ## How to add basic access authentication (i.e. password protect) to a directory
-# NOTE: we use `.htpasswd` below but you need to create a new file(name) for each
-# different website you want to add a password to, so don't add multiple lines to
-# the same `.htpasswd` file as this will allow all users/passwords to work for all
-# websites that reference this `.htpasswd` file.
-- Create a `.htpasswd` file containing the  username. The `.htpasswd` file should
-be stored in the `docker/nginx` directory:
-   $ sudo sh -c "echo -n '<USERNAME>:' >> docker/nginx/.htpasswd"
+# NOTE: we use `.htpasswd-<website>` below because you need to create a new
+# file(name) for each different website you want to add a password to, so don't
+# add multiple lines to the same `.htpasswd` file as this will allow all
+# users/passwords to work for all websites that reference this `.htpasswd`
+# file.
+- Create a `.htpasswd-<website>` file containing the  username. The
+`.htpasswd-<website>` file should be stored in the `docker/nginx/conf.d`
+directory:
+   $ sudo sh -c "echo -n '<USERNAME>:' >> docker/nginx/conf.d/.htpasswd-<website>"
 - Generate the password, after running this command you will be asked to input a
 password and repeat it:
-   $ sudo sh -c "openssl passwd -apr1 >> docker/nginx/.htpasswd"
+   $ sudo sh -c "openssl passwd -apr1 >> docker/nginx/conf.d/.htpasswd-<website>"
 - Add the following two lines to a `server` or `location` block in
 `docker/nginx/conf.d/default.conf`:
    auth_basic "Please login";
-   auth_basic_user_file /etc/nginx/.htpasswd;
+   auth_basic_user_file /etc/nginx/conf.d/.htpasswd-<website>;
 - Reload Nginx

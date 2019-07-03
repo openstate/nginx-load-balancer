@@ -50,8 +50,8 @@ def deploy_and_restart(c):
         c.sudo('bash -c "cd %s && docker-compose restart"' % (DIR))
         c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))
 
-
-def deploy_and_up():
+@task
+def deploy_and_up(c):
     (
         "Runs 'git pull', 'docker-compose up -d' (required if you update "
         "Nginx version) and reloads Nginx"
@@ -71,7 +71,8 @@ def deploy_and_up():
         c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))
 
 
-def deploy_certbot():
+@task
+def deploy_certbot(c):
     (
         "Runs 'git pull', 'docker-compose build c-certbot', 'docker-compose "
         "up -d' (required if you update Certbot version) and reloads Nginx"

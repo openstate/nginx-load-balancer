@@ -1,36 +1,92 @@
-from fabric.api import run, env, cd, sudo
+from fabric import Connection, Config, task
+import getpass
 
-env.use_ssh_config = True
-env.hosts = ["Beryllium", "Carbon", "Nitrogen", "Oxygen"]
+# Hosts to run the commands on
+HOSTS = ["Beryllium", "Carbon", "Nitrogen", "Oxygen"]
+
+# Name of the git repository
+GIT_REPO = 'nginx-load-balancer'
+
+# Path of the directory
+DIR = '/home/projects/%s/docker' % (GIT_REPO)
+
+sudo_pass = getpass.getpass("What's your sudo password?")
 
 
-def deploy_and_reload():
+@task()
+def deploy_and_reload(c):
     "Runs 'git pull' and reloads Nginx"
-    with cd('/home/projects/nginx-load-balancer/docker'):
-        run('git pull git@github.com:openstate/nginx-load-balancer.git')
-        sudo('./reload.sh')
+    for host in HOSTS:
+        print('\n\n*** CONNECTING TO: %s' % (host))
+        config = Config(overrides={'sudo': {'password': sudo_pass}})
+        c = Connection(host, config=config)
+
+        c.run(
+            'cd %s && git pull git@github.com:openstate/%s.git' % (
+                DIR,
+                GIT_REPO
+            )
+        )
+        c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))
 
 
-def deploy_and_restart():
-    "Runs 'git pull', restarts docker-compose (required if you change nginx.conf) and reloads Nginx"
-    with cd('/home/projects/nginx-load-balancer/docker'):
-        run('git pull git@github.com:openstate/nginx-load-balancer.git')
-        sudo('docker-compose restart')
-        sudo('./reload.sh')
+@task()
+def deploy_and_restart(c):
+    (
+        "Runs 'git pull', restarts docker-compose (required if you change "
+        "nginx.conf) and reloads Nginx"
+    )
+    for host in HOSTS:
+        print('\n\n*** CONNECTING TO: %s' % (host))
+        config = Config(overrides={'sudo': {'password': sudo_pass}})
+        c = Connection(host, config=config)
+
+        c.run(
+            'cd %s && git pull git@github.com:openstate/%s.git' % (
+                DIR,
+                GIT_REPO
+            )
+        )
+        c.sudo('bash -c "cd %s && docker-compose restart"' % (DIR))
+        c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))
 
 
 def deploy_and_up():
-    "Runs 'git pull', 'docker-compose up -d' (required if you update Nginx version) and reloads Nginx"
-    with cd('/home/projects/nginx-load-balancer/docker'):
-        run('git pull git@github.com:openstate/nginx-load-balancer.git')
-        sudo('docker-compose up -d')
-        sudo('./reload.sh')
+    (
+        "Runs 'git pull', 'docker-compose up -d' (required if you update "
+        "Nginx version) and reloads Nginx"
+    )
+    for host in HOSTS:
+        print('\n\n*** CONNECTING TO: %s' % (host))
+        config = Config(overrides={'sudo': {'password': sudo_pass}})
+        c = Connection(host, config=config)
+
+        c.run(
+            'cd %s && git pull git@github.com:openstate/%s.git' % (
+                DIR,
+                GIT_REPO
+            )
+        )
+        c.sudo('bash -c "cd %s && docker-compose up -d"' % (DIR))
+        c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))
 
 
 def deploy_certbot():
-    "Runs 'git pull', 'docker-compose build c-certbot',  'docker-compose up -d' (required if you update Certbot version) and reloads Nginx"
-    with cd('/home/projects/nginx-load-balancer/docker'):
-        run('git pull git@github.com:openstate/nginx-load-balancer.git')
-        sudo('docker-compose build c-certbot')
-        sudo('docker-compose up -d')
-        sudo('./reload.sh')
+    (
+        "Runs 'git pull', 'docker-compose build c-certbot', 'docker-compose "
+        "up -d' (required if you update Certbot version) and reloads Nginx"
+    )
+    for host in HOSTS:
+        print('\n\n*** CONNECTING TO: %s' % (host))
+        config = Config(overrides={'sudo': {'password': sudo_pass}})
+        c = Connection(host, config=config)
+
+        c.run(
+            'cd %s && git pull git@github.com:openstate/%s.git' % (
+                DIR,
+                GIT_REPO
+            )
+        )
+        c.sudo('bash -c "cd %s && docker-compose build c-certbot"' % (DIR))
+        c.sudo('bash -c "cd %s && docker-compose up -d"' % (DIR))
+        c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))

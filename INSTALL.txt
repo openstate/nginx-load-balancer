@@ -41,7 +41,7 @@ any changes you made to it (see
 https://forums.docker.com/t/modify-a-file-which-mount-as-a-data-volume-but-it-didnt-change-in-container/2813/11):
    - set backupcopy=yes
 NOTE2: If you edit docker/nginx/nginx.conf, push it to GitHub and pull it to the
-servers, use `fab deploy_and_restart`, as `docker-compose restart` is required to
+servers, use `fab deploy-and-restart`, as `docker-compose restart` is required to
 update the new inode (otherwise the new `nginx.conf` is not mounted in the
 container)
 
@@ -74,7 +74,7 @@ Or combine both testing and reloading by using the reload.sh script
     - (optional) change the version of Certbot in `docker/Dockerfile-cerbot` (see the most recent version https://hub.docker.com/r/certbot/certbot/tags and check the changelog https://github.com/certbot/certbot/blob/master/CHANGELOG.md)
 - Rebuild and create the new container
    # Using Fabric to deploy on multiple servers
-   $ fab deploy_and_up
+   $ fab deploy-and-up
 
    # Alternative
    $ cd docker

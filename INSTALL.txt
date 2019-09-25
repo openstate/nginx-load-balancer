@@ -82,6 +82,11 @@ Or combine both testing and reloading by using the reload.sh script
 - You will see some `nginx: [warn] conflicting server name...` messages, these are expected during the build process and can be ignored
 
 
+## Nginx load balancer container won't start
+It has happened that after a server reboot the docker_nginx-load-balancer_1 container won't start/restart and just gives an error like this (NOTE: this error is different from a simply misconfigured nginx conf file error): Starting docker_c-nginx-load-balancer_1 ... error
+If this is the case you can force a container recreation using `sudo docker-compose up -d --force-recreate`
+
+
 ## How to add basic access authentication (i.e. password protect) to a directory
 # NOTE: we use `.htpasswd-<website>` below because you need to create a new
 # file(name) for each different website you want to add a password to, so don't

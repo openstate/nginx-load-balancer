@@ -10,7 +10,7 @@ GIT_REPO = 'nginx-load-balancer'
 # Path of the directory
 DIR = '/home/projects/%s/docker' % (GIT_REPO)
 
-sudo_pass = getpass.getpass("What's your sudo password?")
+sudo_pass = getpass.getpass("Enter your sudo password: ")
 
 
 @task()

@@ -19,7 +19,10 @@
 #    return 301 http://$host$request_uri;
 #}
 
-## Example using an upstream docker specified in docker/nginx/nginx.conf:
+## Example of proxying incoming HTTP requests to a Docker container (we
+## use the variable $upstream which is resolved via Docker's DNS
+## 127.0.0.11 (see nginx.conf) every 30 seconds to avoid Nginx load
+## balancer not starting when it can't find the Docker container):
 ## opencultuurdata.nl
 ## served by docker_c-wordpress-nginx_1
 #server {
@@ -29,7 +32,8 @@
 #        www.opencultuurdata.nl;
 #
 #    location / {
-#        proxy_pass http://docker_c-wordpress-nginx_1;
+#        set $upstream docker_c-wordpress-nginx_1;
+#        proxy_pass http://$upstream;
 #        # Preserve the host header (i.e., the domain name) otherwise
 #        # WordPress MU doesn't know which site to serve
 #        proxy_set_header Host $host;
@@ -98,7 +102,10 @@
 #    return 301 https://$host$request_uri;
 #}
 
-## Example using an upstream docker specified in docker/nginx/nginx.conf over HTTPS:
+## Example of proxying incoming HTTPS requests to a Docker container (we
+## use the variable $upstream which is resolved via Docker's DNS
+## 127.0.0.11 (see nginx.conf) every 30 seconds to avoid Nginx load
+## balancer not starting when it can't find the Docker container):
 ## accountabilityhack.nl
 ## served by docker_c-wordpress-nginx_1
 #server {
@@ -111,7 +118,8 @@
 #    add_header Strict-Transport-Security max-age=31536000 always;
 #
 #    location / {
-#        proxy_pass http://docker_c-wordpress-nginx_1;
+#        set $upstream docker_c-wordpress-nginx_1;
+#        proxy_pass http://$upstream;
 #        # Preserve the host header (i.e., the domain name) otherwise
 #        # WordPress MU doesn't know which site to serve
 #        proxy_set_header Host $host;

@@ -159,7 +159,7 @@ the certificate without the subdomain, e.g.:
 
 
 ### Create locally signed and locally trusted certificates for development
-Install [mkcert](https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/), this is easiest by downloading a [binary release](https://github.com/FiloSottile/mkcert/releases/tag/v1.1.2) into the `docker/mkcert` directory (make it executable and rename the release to `mkcert`)
+Install [mkcert](https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/), this is easiest by downloading the latest [binary release](https://github.com/FiloSottile/mkcert/releases/) into the `docker/mkcert` directory (make it executable and rename the release to `mkcert`)
 
 Create a new local CA and install the CA in the system trust store and your browsers (requires restart of your browser!)
    $ cd docker/mkcert

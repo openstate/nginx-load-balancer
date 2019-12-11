@@ -115,7 +115,7 @@
 #        www.accountabilityhack.nl;
 #    ssl_certificate /etc/letsencrypt/live/accountabilityhack.nl/fullchain.pem;
 #    ssl_certificate_key /etc/letsencrypt/live/accountabilityhack.nl/privkey.pem;
-#    add_header Strict-Transport-Security max-age=31536000 always;
+#    add_header Strict-Transport-Security max-age=63072000 always;
 #
 #    location / {
 #        set $upstream docker_c-wordpress-nginx_1;

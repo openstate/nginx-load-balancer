@@ -1,9 +1,4 @@
 ## Installation and basic operation of the Nginx load balancer
-Note: when you use the Nginx load balancer for the first time on a new server,
-generate a new dhparams.pem
-   $ cd docker
-   $ openssl dhparam -out dhparams.pem 2048
-
 Setup TransIP API (needed for Let's Encrypt's DNS method)
 Either copy `transip-rsa.key` and `transip.ini` from another server
 (e.g., Oxygen) to the `docker` directory, or if there is no existing API

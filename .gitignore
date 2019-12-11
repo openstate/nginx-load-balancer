@@ -1,6 +1,5 @@
 log/*
 .htpasswd*
-dhparams.pem
 *.swp
 transip.ini
 transip-rsa.key

@@ -1,8 +1,8 @@
-FROM certbot/certbot:v1.0.0
+FROM certbot/certbot:v1.4.0
 MAINTAINER Open State Foundation <developers@openstate.eu>
 
 WORKDIR /opt/certbot
 RUN pip install --upgrade pip
-RUN pip install certbot-dns-transip==0.2.5
+RUN pip install certbot-dns-transip==0.3.0
 
 ENTRYPOINT tail -f /dev/null

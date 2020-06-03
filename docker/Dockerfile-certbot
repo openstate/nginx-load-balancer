@@ -1,4 +1,4 @@
-FROM certbot/certbot:v1.4.0
+FROM certbot/certbot:v1.5.0
 MAINTAINER Open State Foundation <developers@openstate.eu>
 
 WORKDIR /opt/certbot

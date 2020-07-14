@@ -88,7 +88,7 @@ If this is the case you can force a container recreation using `sudo docker-comp
 # add multiple lines to the same `.htpasswd` file as this will allow all
 # users/passwords to work for all websites that reference this `.htpasswd`
 # file.
-- Create a `.htpasswd-<website>` file containing the  username. The
+- Create a `.htpasswd-<website>` file containing the username. The
 `.htpasswd-<website>` file should be stored in the `docker/nginx/conf.d`
 directory:
    $ sudo sh -c "echo -n '<USERNAME>:' >> docker/nginx/conf.d/.htpasswd-<website>"

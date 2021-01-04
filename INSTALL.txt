@@ -67,6 +67,7 @@ Or combine both testing and reloading by using the reload.sh script
     - Also check the changelog (especially for 'Security' related fixes) on http://nginx.org/en/CHANGES
 - Change the version of Nginx Alpine in `docker/docker-compose.yml`
     - (optional) change the version of Certbot in `docker/Dockerfile-cerbot` (see the most recent version https://hub.docker.com/r/certbot/certbot/tags and check the changelog https://github.com/certbot/certbot/blob/master/CHANGELOG.md)
+    - (optional) change the version of certbot-dns-transip in `docker/Dockerfile-cerbot` (see the most recent version https://github.com/hsmade/certbot-dns-transip/releases)
 - Rebuild and create the new container
    # Using Fabric to deploy on multiple servers
    $ fab deploy-and-up

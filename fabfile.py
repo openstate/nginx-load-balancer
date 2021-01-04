@@ -2,7 +2,7 @@ from fabric import Connection, Config, task
 import getpass
 
 # Hosts to run the commands on
-HOSTS = ["Beryllium", "Carbon", "Nitrogen", "Oxygen"]
+HOSTS = ["Beryllium", "Carbon", "Oxygen", "Fluorine"]
 
 # Name of the git repository
 GIT_REPO = 'nginx-load-balancer'

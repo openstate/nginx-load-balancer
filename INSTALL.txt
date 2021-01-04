@@ -69,8 +69,10 @@ Or combine both testing and reloading by using the reload.sh script
     - (optional) change the version of Certbot in `docker/Dockerfile-cerbot` (see the most recent version https://hub.docker.com/r/certbot/certbot/tags and check the changelog https://github.com/certbot/certbot/blob/master/CHANGELOG.md)
     - (optional) change the version of certbot-dns-transip in `docker/Dockerfile-cerbot` (see the most recent version https://github.com/hsmade/certbot-dns-transip/releases)
 - Rebuild and create the new container
-   # Using Fabric to deploy on multiple servers
+   # Use Fabric to deploy the new Nginx version on multiple servers
    $ fab deploy-and-up
+   # If you also updated Cerbot/certbot-dns-transip then run
+   $ fab deploy-certbot
 
    # Alternative
    $ cd docker

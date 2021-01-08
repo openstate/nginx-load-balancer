@@ -148,7 +148,7 @@ a certificate:
    # Remove `~/letsencrypt` on the old and new machine
    # Now follow the other steps above in the 'Install the certificate' section
 
-NB: you probably need to remove the /etc/letsencrypts/accounts folder as they don't seem to be transferable between servers; a new account will be recreated when requesting a new certificate
+NB: you probably need to remove the /etc/letsencrypts/accounts folder as they don't seem to be transferable between servers; a new account will be recreated when requesting a new certificate; NOTE: if you do this then you need to change the account id in the configuration for all certficates (/etc/letsencrypt/renewal/*.conf)
 
 
 ### Remove domain from certificate

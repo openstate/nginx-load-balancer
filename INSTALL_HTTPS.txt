@@ -17,11 +17,10 @@ of this server.
 
 (This step is only necessary if you retrieve the certificate using the
 HTTP method. Normally we use the DNS method.)
-Temporarily add the domain to
-docker/nginx/conf.d/default.conf to retrieve the certificate using HTTP by
-adding the following block:
+In `docker/nginx/conf.d/default.conf` make sure that the server block contains
+the location block for `/.well-known/acme-challenge/`, e.g.:
 server {
-    listen 80;
+    listen 443;
     server_name
         transparencycamp.eu
         www.transparencycamp.eu:
@@ -54,13 +53,6 @@ IMPORTANT NOTES:
    "certbot renew"
 
 
-(This step is only necessary if you retrieve the certificate using the
-HTTP method. Normally we use the DNS method.)
-You can now remove the temporary changes you made to
-docker/nginx/conf.d/default.conf. We will add the final default.conf
-configurations below.
-
-
 ### Install the certificate
 If this is the first certificate on the server you can now uncomment the top
 server block in docker/nginx/conf.d/default.conf to enable a default response
@@ -72,8 +64,9 @@ to your ~/.vimrc file otherwise the container will not receive any changes you
 made to it! https://forums.docker.com/t/modify-a-file-which-mount-as-a-data-volume-but-it-didnt-change-in-container/2813/11:
 set backupcopy=yes
 
-Add the following section (make sure the proxy_pass and ssl paths are
-correct! change '*' with 'www' if you don't use a wildcard certificate):
+You can now add the `ssl_certificate` and `ssl_certificate_key` lines to your
+`server` block (make sure the proxy_pass and ssl paths are correct! change '*'
+with 'www' if you don't use a wildcard certificate), e.g.:
 server {
     listen 443 ssl http2;
     server_name

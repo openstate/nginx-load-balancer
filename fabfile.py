@@ -3,7 +3,7 @@ import getpass
 
 # Hosts to run the commands on
 OLD_HOSTS = ["Beryllium", "Carbon"]
-HOSTS = ["Beryllium", "Carbon", "Oxygen", "Fluorine"]
+HOSTS = ["Beryllium", "Carbon", "Oxygen", "Fluorine", "Neon"]
 
 # Name of the git repository
 GIT_REPO = 'nginx-load-balancer'

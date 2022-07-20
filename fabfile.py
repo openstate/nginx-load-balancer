@@ -3,6 +3,7 @@ import getpass
 
 # Hosts to run the commands on
 OLD_HOSTS = ["Beryllium", "Carbon"]
+NEW_DOCKER = ["Neon"]
 HOSTS = ["Beryllium", "Carbon", "Oxygen", "Fluorine", "Neon"]
 
 # Name of the git repository
@@ -54,7 +55,10 @@ def deploy_and_restart(c):
                 GIT_REPO
             )
         )
-        c.sudo('bash -c "cd %s && docker-compose restart"' % (DIR))
+        if host in NEW_DOCKER:
+            c.sudo('bash -c "cd %s && docker compose restart"' % (DIR))
+        else:
+            c.sudo('bash -c "cd %s && docker-compose restart"' % (DIR))
         c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))
 
 @task
@@ -77,7 +81,10 @@ def deploy_and_up(c):
                 GIT_REPO
             )
         )
-        c.sudo('bash -c "cd %s && docker-compose up -d"' % (DIR))
+        if host in NEW_DOCKER:
+            c.sudo('bash -c "cd %s && docker compose up -d"' % (DIR))
+        else:
+            c.sudo('bash -c "cd %s && docker-compose up -d"' % (DIR))
         c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))
 
 
@@ -101,6 +108,10 @@ def deploy_certbot(c):
                 GIT_REPO
             )
         )
-        c.sudo('bash -c "cd %s && docker-compose build c-certbot"' % (DIR))
-        c.sudo('bash -c "cd %s && docker-compose up -d"' % (DIR))
+        if host in NEW_DOCKER:
+            c.sudo('bash -c "cd %s && docker compose build c-certbot"' % (DIR))
+            c.sudo('bash -c "cd %s && docker compose up -d"' % (DIR))
+        else:
+            c.sudo('bash -c "cd %s && docker-compose build c-certbot"' % (DIR))
+            c.sudo('bash -c "cd %s && docker-compose up -d"' % (DIR))
         c.sudo('bash -c "cd %s && ./reload.sh"' % (DIR))

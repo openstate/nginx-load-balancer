@@ -8,7 +8,7 @@ Let's Encrypt certificates are valid for 90 days. Add a cronjob to
 automatically check twice a day (on 11:27 and 23:27) if the certificates need
 to be renewed and renews them if needed. To do that, add
 the following line to `crontab` (using `sudo crontab -e`):
-27 11,23 * * * sudo docker exec docker_c-certbot_1 certbot renew && (cd /home/projects/nginx-load-balancer/docker && sudo ./reload.sh)
+27 11,23 * * * sudo docker exec docker_c-certbot_1 certbot renew; cd /home/projects/nginx-load-balancer/docker && sudo ./reload.sh
 
 
 ### Retrieve a certificate

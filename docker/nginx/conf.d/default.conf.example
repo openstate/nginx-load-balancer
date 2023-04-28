@@ -12,7 +12,7 @@
 #    return 404;
 #}
 #server {
-#    listen 443;
+#    listen 443 ssl http2;
 #    # Specify certificate info for a domain, it doesn't matter which domain
 #    ssl_certificate /etc/letsencrypt/live/<DOMAIN>/fullchain.pem;
 #    ssl_certificate_key /etc/letsencrypt/live/<DOMAIN>/privkey.pem;

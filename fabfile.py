@@ -3,8 +3,8 @@ import getpass
 
 # Hosts to run the commands on
 OLD_HOSTS = ["Carbon"]
-NEW_DOCKER = ["Neon"]
-HOSTS = ["Oxygen", "Fluorine", "Neon", "wolf"]
+NEW_DOCKER = ["Neon", "wolf", "canis"]
+HOSTS = ["Oxygen", "Fluorine", "Neon", "wolf", "canis"]
 
 # Name of the git repository
 GIT_REPO = 'nginx-load-balancer'

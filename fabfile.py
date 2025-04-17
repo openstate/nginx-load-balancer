@@ -2,9 +2,8 @@ from fabric import Connection, Config, task
 import getpass
 
 # Hosts to run the commands on
-OLD_HOSTS = ["Carbon"]
-NEW_DOCKER = ["Neon", "wolf", "canis"]
 HOSTS = ["Oxygen", "Fluorine", "Neon", "wolf", "canis"]
+NEW_DOCKER = ["Neon", "wolf", "canis"]
 
 # Name of the git repository
 GIT_REPO = 'nginx-load-balancer'
@@ -21,10 +20,7 @@ def deploy_and_reload(c):
     for host in HOSTS:
         print('\n\n*** CONNECTING TO: %s' % (host))
         config = Config(overrides={'sudo': {'password': sudo_pass}})
-        if host in OLD_HOSTS:
-            c = Connection(host, config=config, connect_kwargs={'disabled_algorithms': {'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']}})
-        else:
-            c = Connection(host, config=config)
+        c = Connection(host, config=config)
 
         c.run(
             'cd %s && git pull git@github.com:openstate/%s.git' % (
@@ -44,10 +40,7 @@ def deploy_and_restart(c):
     for host in HOSTS:
         print('\n\n*** CONNECTING TO: %s' % (host))
         config = Config(overrides={'sudo': {'password': sudo_pass}})
-        if host in OLD_HOSTS:
-            c = Connection(host, config=config, connect_kwargs={'disabled_algorithms': {'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']}})
-        else:
-            c = Connection(host, config=config)
+        c = Connection(host, config=config)
 
         c.run(
             'cd %s && git pull git@github.com:openstate/%s.git' % (
@@ -70,10 +63,7 @@ def deploy_and_up(c):
     for host in HOSTS:
         print('\n\n*** CONNECTING TO: %s' % (host))
         config = Config(overrides={'sudo': {'password': sudo_pass}})
-        if host in OLD_HOSTS:
-            c = Connection(host, config=config, connect_kwargs={'disabled_algorithms': {'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']}})
-        else:
-            c = Connection(host, config=config)
+        c = Connection(host, config=config)
 
         c.run(
             'cd %s && git pull git@github.com:openstate/%s.git' % (
@@ -97,10 +87,7 @@ def deploy_certbot(c):
     for host in HOSTS:
         print('\n\n*** CONNECTING TO: %s' % (host))
         config = Config(overrides={'sudo': {'password': sudo_pass}})
-        if host in OLD_HOSTS:
-            c = Connection(host, config=config, connect_kwargs={'disabled_algorithms': {'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']}})
-        else:
-            c = Connection(host, config=config)
+        c = Connection(host, config=config)
 
         c.run(
             'cd %s && git pull git@github.com:openstate/%s.git' % (

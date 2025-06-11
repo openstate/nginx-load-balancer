@@ -1,6 +1,6 @@
-Commands to achieve HTTPS using docker_c-nginx-load-balancer_1. We use
+Commands to achieve HTTPS using docker-c-nginx-load-balancer-1. We use
 transparencycamp.eu as example domain. Certbot is already installed via
-docker-compose and available in the `docker_c-certbot_1` container.
+docker-compose and available in the `docker-c-certbot-1` container.
 
 
 ### Setup Let's Encrypt cron
@@ -8,7 +8,7 @@ Let's Encrypt certificates are valid for 90 days. Add a cronjob to
 automatically check twice a day (on 11:27 and 23:27) if the certificates need
 to be renewed and renews them if needed. To do that, add
 the following line to `crontab` (using `sudo crontab -e`):
-27 11,23 * * * sudo docker exec docker_c-certbot_1 certbot renew; cd /home/projects/nginx-load-balancer/docker && sudo ./reload.sh
+27 11,23 * * * sudo docker exec docker-c-certbot-1 certbot renew; cd /home/projects/nginx-load-balancer/docker && sudo ./reload.sh
 
 
 ### Retrieve a certificate
@@ -36,10 +36,10 @@ Reload Nginx:
 Now you can retrieve your certificate using either the DNS method (preferred,
 as this allows you to get a wildcard certificate) or the HTTP method:
    # DNS method
-   $ sudo docker exec docker_c-certbot_1 certbot certonly --agree-tos -m developers@openstate.eu -d transparencycamp.eu -d *.transparencycamp.eu -a dns-transip --dns-transip-credentials transip.ini --dns-transip-propagation-seconds 240
+   $ sudo docker exec docker-c-certbot_1-certbot certonly --agree-tos -m developers@openstate.eu -d transparencycamp.eu -d *.transparencycamp.eu -a dns-transip --dns-transip-credentials transip.ini --dns-transip-propagation-seconds 30
 
    # HTTP method
-   $ sudo docker exec docker_c-certbot_1 certbot certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu
+   $ sudo docker exec docker-c-certbot-1 certbot certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu
 
 This gives the following output:
 IMPORTANT NOTES:
@@ -76,7 +76,7 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/transparencycamp.eu/privkey.pem;
 
     location / {
-        proxy_pass http://docker_c-nginx_1;
+        proxy_pass http://docker-c-nginx-1;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Real-IP $remote_addr;
@@ -138,7 +138,7 @@ a certificate:
    # Check the .conf files of other certificates if the format has changed.
    # Exit sudo and check if it works (NB: --no-random-sleep-on-renew doesn't
    # work with dns-transip as we hardcode it to wait 240 seconds)
-   $ sudo docker exec docker_c-certbot_1 certbot renew --dry-run --no-random-sleep-on-renew
+   $ sudo docker exec docker-c-certbot-1 certbot renew --dry-run --no-random-sleep-on-renew
    # Remove `~/letsencrypt` on the old and new machine
    # Now follow the other steps above in the 'Install the certificate' section
 
@@ -149,9 +149,9 @@ NB: you probably need to remove the /etc/letsencrypts/accounts folder as they do
 If a certificate contains multiple subdomains you sometimes want to remove one
 of those subdomains. Simply first delete the certificate and then regenerate
 the certificate without the subdomain, e.g.:
-   # Note: you can retrieve the cert-name using `sudo docker exec docker_c-certbot_1 certbot certificates` and check the value for 'Certificate Name'
-   $ sudo docker exec docker_c-certbot_1 certbot delete --cert-name transparencycamp.eu
-   # Then use the 'sudo docker exec docker_c-certbot_1 certbot certonly' as shown before in this document without the subdomain you want to remove
+   # Note: you can retrieve the cert-name using `sudo docker exec docker-c-certbot-1 certbot certificates` and check the value for 'Certificate Name'
+   $ sudo docker exec docker-c-certbot-1 certbot delete --cert-name transparencycamp.eu
+   # Then use the 'sudo docker exec docker-c-certbot-1 certbot certonly' as shown before in this document without the subdomain you want to remove
 
 
 ### Create locally signed and locally trusted certificates for development

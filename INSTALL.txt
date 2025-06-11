@@ -21,7 +21,7 @@ Create the directory `html` which can be used to serve static files
    $ mkdir ../html
 
 Before starting a new Nginx load balancer container make sure that:
-   - no other container exists with the name `docker_c-nginx-load-balancer_1`
+   - no other container exists with the name `docker-c-nginx-load-balancer-1`
      or which binds port 80 and/or 443, otherwise creating a new container will
      fail
    - `docker/nginx/conf.d/default.conf` contains all relevant `server` blocks
@@ -42,15 +42,15 @@ container)
 
 
 Always test your configuration before going live with it!
-   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -t
+   $ sudo docker exec docker-c-nginx-load-balancer-1 nginx -t
 
 Reload the configuration:
    # Simple: From the host
-   $ sudo docker exec docker_c-nginx-load-balancer_1 nginx -s reload
+   $ sudo docker exec docker-c-nginx-load-balancer-1 nginx -s reload
 
    # Alternative: From the container
    # Enter the container
-   $ sudo docker exec -it docker_c-nginx-load-balancer_1 sh
+   $ sudo docker exec -it docker-c-nginx-load-balancer-1 sh
    # In the container run the following commands
    $ nginx -t
    $ nginx -s reload
@@ -81,7 +81,7 @@ Or combine both testing and reloading by using the reload.sh script
 
 
 ## Nginx load balancer container won't start
-It has happened that after a server reboot the docker_nginx-load-balancer_1 container won't start/restart and just gives an error like this (NOTE: this error is different from a simply misconfigured nginx conf file error): Starting docker_c-nginx-load-balancer_1 ... error
+It has happened that after a server reboot the docker-nginx-load-balancer-1 container won't start/restart and just gives an error like this (NOTE: this error is different from a simply misconfigured nginx conf file error): Starting docker-c-nginx-load-balancer-1 ... error
 If this is the case you can force a container recreation using `sudo docker-compose up -d --force-recreate`
 
 

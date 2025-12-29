@@ -36,7 +36,7 @@ Reload Nginx:
 Now you can retrieve your certificate using either the DNS method (preferred,
 as this allows you to get a wildcard certificate) or the HTTP method:
    # DNS method
-   $ sudo docker exec docker-c-certbot_1 certbot certonly --agree-tos -m developers@openstate.eu -d transparencycamp.eu -d *.transparencycamp.eu -a dns-transip --dns-transip-credentials transip.ini --dns-transip-propagation-seconds 30
+   $ sudo docker exec docker-c-certbot-1 certbot certonly --agree-tos -m developers@openstate.eu -d transparencycamp.eu -d *.transparencycamp.eu -a dns-transip --dns-transip-credentials transip.ini --dns-transip-propagation-seconds 30
 
    # HTTP method
    $ sudo docker exec docker-c-certbot-1 certbot certonly -m developers@openstate.eu --webroot --webroot-path /home/projects/html -d transparencycamp.eu -d www.transparencycamp.eu

@@ -2,8 +2,8 @@ from fabric import Connection, Config, task
 import getpass
 
 # Hosts to run the commands on
-HOSTS = ["Oxygen", "Fluorine", "Neon", "bron-chat"]
-NEW_DOCKER = ["Neon", "bron-chat"]
+HOSTS = ["Oxygen", "Fluorine", "Neon", "Sodium"]
+NEW_DOCKER = ["Neon", "Sodium"]
 
 # Name of the git repository
 GIT_REPO = 'nginx-load-balancer'

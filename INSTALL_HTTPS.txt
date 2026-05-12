@@ -119,6 +119,15 @@ Reload nginx:
 
 
 ### Migrate a certificate from one machine to another
+NEW:
+Migrating is not needed. The following is a better and more simple way:
+For the domain that you want to move, create a (random) subdomain DNS record
+and point it to the new machine. Use the DNS method to retrieve a certificate,
+as this allows us to also get a certificate for the main domain (and wildcard).
+Remove the (random) subdomain after you changed the DNS of the main domain to
+the IP addresses of the new machine.
+
+OLD:
 When moving a website it is best to migrate the certificate instead of creating
 a new one. The latter option is a bad idea because you first need to change the
 DNS to point to the new machine in order to retrieve a new certificate, which

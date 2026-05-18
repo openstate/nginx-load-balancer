@@ -175,3 +175,4 @@ Example of generating certificates for openstate.eu
    $ mkdir openstate.eu
    $ mv openstate.eu+1.pem openstate.eu/fullchain.pem
    $ mv openstate.eu+1-key.pem openstate.eu/privkey.pem
+   # reload the nginx config

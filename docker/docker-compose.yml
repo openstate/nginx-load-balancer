@@ -27,3 +27,4 @@ services:
       - ./transip-rsa.key:/opt/certbot/transip-rsa.key
 networks:
   nginx-load-balancer:
+    enable_ipv6: true

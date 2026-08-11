@@ -34,4 +34,4 @@ networks:
     enable_ipv6: true
     ipam:
       config:
-        - subnet: fd00:dead:beef::/48
+        - subnet: fd00:dead:cafe::/64

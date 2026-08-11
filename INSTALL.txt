@@ -61,6 +61,29 @@ Or combine both testing and reloading by using the reload.sh script
    $ ./reload.sh
 
 
+## IPv6
+Although requests to the server can be made both with IPV4 and IPV6 Docker itself uses IPV4 for its networks by default.
+When IP addresses of clients are required (e.g. for logging, for geolocating), the address for an IPV4 request will be transferred
+correctly but for IPV6 requests the IPV4 address of the gateway of the Docker network will be shown instead. To enable retrieving
+the client IP address for IPV6 requests, IPV6 must be enabled in Docker.
+
+From Docker 27 onwards IPV6 is enabled by default in Docker. For earlier versions, create `/etc/docker/daemon.json` on the
+host with the following contents:
+{
+  "ipv6": true,
+  "fixed-cidr-v6": "fd00:dead:beef::/48",
+  "ip6tables": true,
+  "experimental": true
+}
+and restart Docker:
+  - `sudo systemctl daemon-reload`
+  - `sudo systemctl restart docker`
+
+In your project you'll need to use the `nginx-load-balancer-ipv6` network. For an example, see `docker/docker-compose.yml.example` in
+https://github.com/openstate/stembureaus.
+
+
+
 ## How to update Nginx (and Certbot)
 - NOTE: never(!) run `docker-compose down` as this removes the docker network and all containers won't be able reconnect to the new network!
 - Check the most recent version of Nginx Alpine on https://hub.docker.com/_/nginx

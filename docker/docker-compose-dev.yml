@@ -6,5 +6,3 @@ services:
     restart: "no"
   c-certbot:
     restart: "no"
-networks:
-  nginx-load-balancer:

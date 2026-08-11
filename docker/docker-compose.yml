@@ -32,3 +32,6 @@ networks:
   # It supports both ipv4 and ipv6
   nginx-load-balancer-ipv6:
     enable_ipv6: true
+    ipam:
+      config:
+        - subnet: fd00:dead:beef::/48

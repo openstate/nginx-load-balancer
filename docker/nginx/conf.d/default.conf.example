@@ -5,7 +5,7 @@
 ## In case of a HTTPS request on port 443 return the URL without HTTPS.
 ## This does give a warning as the domain doesn't match the cert's
 ## domain, but it will redirect to the correct domain if the user
-## confirms the securtiy exception. This block can be uncommented once a
+## confirms the security exception. This block can be uncommented once a
 ## certificate is available on this server (see INSTALL_HTTPS.txt).
 #server {
 #    listen 80;
@@ -128,5 +128,15 @@
 #        proxy_set_header X-Forwarded-Proto $scheme;
 #        proxy_set_header X-Real-IP $remote_addr;
 #        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#    }
+#
+#    # Security.txt
+#    location = /.well-known/security.txt {
+#        return 301 https://openstate.eu/.well-known/security.txt;
+#    }
+#
+#    # Legacy top-level location, redirected to the same place
+#    location = /security.txt {
+#        return 301 https://openstate.eu/.well-known/security.txt;
 #    }
 #}

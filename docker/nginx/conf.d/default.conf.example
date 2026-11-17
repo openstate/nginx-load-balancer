@@ -25,7 +25,7 @@
 ## 127.0.0.11 (see nginx.conf) every 30 seconds to avoid Nginx load
 ## balancer not starting when it can't find the Docker container):
 ## opencultuurdata.nl
-## served by docker_c-wordpress-nginx_1
+## served by docker-c-wordpress-nginx-1
 #server {
 #    listen 80;
 #    server_name
@@ -33,7 +33,7 @@
 #        www.opencultuurdata.nl;
 #
 #    location / {
-#        set $upstream docker_c-wordpress-nginx_1;
+#        set $upstream docker-c-wordpress-nginx-1;
 #        proxy_pass http://$upstream;
 #        # Preserve the host header (i.e., the domain name) otherwise
 #        # WordPress MU doesn't know which site to serve
@@ -108,7 +108,7 @@
 ## 127.0.0.11 (see nginx.conf) every 30 seconds to avoid Nginx load
 ## balancer not starting when it can't find the Docker container):
 ## accountabilityhack.nl
-## served by docker_c-wordpress-nginx_1
+## served by docker-c-wordpress-nginx-1
 #server {
 #    listen 443 ssl;
 #    http2 on;
@@ -118,9 +118,10 @@
 #    ssl_certificate /etc/letsencrypt/live/accountabilityhack.nl/fullchain.pem;
 #    ssl_certificate_key /etc/letsencrypt/live/accountabilityhack.nl/privkey.pem;
 #    add_header Strict-Transport-Security max-age=63072000 always;
+#    include conf.d/security-txt.snippet;
 #
 #    location / {
-#        set $upstream docker_c-wordpress-nginx_1;
+#        set $upstream docker-c-wordpress-nginx-1;
 #        proxy_pass http://$upstream;
 #        # Preserve the host header (i.e., the domain name) otherwise
 #        # WordPress MU doesn't know which site to serve
@@ -128,15 +129,5 @@
 #        proxy_set_header X-Forwarded-Proto $scheme;
 #        proxy_set_header X-Real-IP $remote_addr;
 #        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#    }
-#
-#    # Security.txt
-#    location = /.well-known/security.txt {
-#        return 301 https://openstate.eu/.well-known/security.txt;
-#    }
-#
-#    # Legacy top-level location, redirected to the same place
-#    location = /security.txt {
-#        return 301 https://openstate.eu/.well-known/security.txt;
 #    }
 #}
